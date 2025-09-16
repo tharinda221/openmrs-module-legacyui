@@ -20,7 +20,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -73,7 +73,7 @@ public class ShowGraphTag extends BodyTagSupport {
 			
 			try {
 				ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-				ChartUtilities.writeChartAsPNG(byteArray, chart, width, height);
+				ChartUtils.writeChartAsPNG(byteArray, chart, width, height);
 				pageContext.getResponse().setContentType("image/png");
 				pageContext.getResponse().getWriter().write(byteArray.toString());
 				

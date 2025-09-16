@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
 public abstract class AbstractGraphServlet extends HttpServlet {
@@ -70,10 +70,10 @@ public abstract class AbstractGraphServlet extends HttpServlet {
 			try {
 				if (JPG_MIME_TYPE.equalsIgnoreCase(mimeType)) {
 					response.setContentType(JPG_MIME_TYPE);
-					ChartUtilities.writeChartAsJPEG(response.getOutputStream(), chart, width, height);
+					ChartUtils.writeChartAsJPEG(response.getOutputStream(), chart, width, height);
 				} else if (PNG_MIME_TYPE.equalsIgnoreCase(mimeType)) {
 					response.setContentType(PNG_MIME_TYPE);
-					ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, width, height);
+					ChartUtils.writeChartAsPNG(response.getOutputStream(), chart, width, height);
 				} else {
 					// Throw exception: unsupported mime type
 				}

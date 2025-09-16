@@ -151,7 +151,7 @@ public class ConceptStatsFormController extends SimpleFormController {
 						Double total = 0.0; // sum of values. used for mean
 						
 						// dataset setup for lineChart
-						TimeSeries timeSeries = new TimeSeries(concept.getName().getName(), Day.class);
+						TimeSeries timeSeries = new TimeSeries(concept.getName().getName());
 						TimeSeriesCollection timeDataset = new TimeSeriesCollection();
 						Calendar calendar = Calendar.getInstance();
 						

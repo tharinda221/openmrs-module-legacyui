@@ -45,9 +45,10 @@
 	</modules>
 	
 	<properties>
-		<openmrsPlatformVersion>2.7.3</openmrsPlatformVersion>
+		<openmrsPlatformVersion>2.6.0</openmrsPlatformVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javaCompilerVersion>8</javaCompilerVersion>
+        <javaCompilerVersion>1.8</javaCompilerVersion>
+        <skipUnpack>false</skipUnpack>
 	</properties>
 
 	<dependencyManagement>
@@ -69,6 +70,7 @@
 				<version>${openmrsPlatformVersion}</version>
 				<type>jar</type>
 				<scope>provided</scope>
+				<optional>true</optional>
 			</dependency>
 						
 			<dependency>
@@ -96,15 +98,15 @@
 			</dependency>
 
             <dependency>
-                <groupId>jfree</groupId>
+                <groupId>org.jfree</groupId>
                 <artifactId>jfreechart</artifactId>
-                <version>1.0.12</version>
+                <version>1.5.4</version>
             </dependency>
 
             <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>jsp-api</artifactId>
-                <version>2.0</version>
+                <groupId>jakarta.servlet.jsp</groupId>
+                <artifactId>jakarta.servlet.jsp-api</artifactId>
+                <version>3.1.1</version>
                 <scope>provided</scope>
             </dependency>
 						
@@ -112,8 +114,8 @@
 
 			<dependency>
 				<groupId>org.mockito</groupId>
-				<artifactId>mockito-inline</artifactId>
-				<version>3.12.4</version>
+				<artifactId>mockito-core</artifactId>
+				<version>5.7.0</version>
 				<scope>test</scope>
 			</dependency>
 
@@ -139,9 +141,10 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.13.0</version>
 					<configuration>
-						<target>${javaCompilerVersion}</target>
 						<source>${javaCompilerVersion}</source>
+						<target>${javaCompilerVersion}</target>
                         <encoding>${project.build.sourceEncoding}</encoding>
 					</configuration>
 				</plugin>
@@ -156,15 +159,11 @@
                         </execution>
                     </executions>
                 </plugin>
-				<plugin>
-					<groupId>org.openmrs.maven.plugins</groupId>
-					<artifactId>maven-openmrs-plugin</artifactId>
-					<version>1.0.1</version>
-				</plugin>
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.4</version>
+					<version>3.6.1</version>
 				</plugin>
                 <plugin>
                     <artifactId>maven-release-plugin</artifactId>
@@ -250,7 +249,7 @@
 				<plugin>
 				    <groupId>org.apache.maven.plugins</groupId>
 				    <artifactId>maven-surefire-plugin</artifactId>
-				    <version>2.22.1</version>
+				    <version>3.2.5</version>
 				    <configuration>
 				    	<argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
 				    </configuration>
@@ -276,17 +275,27 @@
 
 	<repositories>
 		<repository>
+			<id>central</id>
+			<name>Maven Central</name>
+			<url>https://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
 			<id>openmrs-repo</id>
 			<name>OpenMRS Nexus Repository</name>
-			<url>https://mavenrepo.openmrs.org/public</url>
+			<url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
 		</repository>
 	</repositories>
 
 	<pluginRepositories>
 		<pluginRepository>
+			<id>central</id>
+			<name>Maven Central</name>
+			<url>https://repo1.maven.org/maven2</url>
+		</pluginRepository>
+		<pluginRepository>
 			<id>openmrs-repo</id>
 			<name>OpenMRS Nexus Repository</name>
-			<url>https://mavenrepo.openmrs.org/public</url>
+			<url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -338,6 +347,17 @@
 					</plugins>
 				</pluginManagement>
 			</build>
+		</profile>
+		<profile>
+			<id>test-compile-only</id>
+			<activation>
+				<property>
+					<name>maven.test.compile</name>
+				</property>
+			</activation>
+			<properties>
+				<skipUnpack>true</skipUnpack>
+			</properties>
 		</profile>
 	</profiles>
 </project>

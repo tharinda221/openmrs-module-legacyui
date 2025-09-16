@@ -12,7 +12,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-    command: --default-authentication-plugin=mysql_native_password --profiling=1
+    command: --default-authentication-plugin=mysql_native_password
 
   openmrs:
     image: openmrs/openmrs-core:2.7.3

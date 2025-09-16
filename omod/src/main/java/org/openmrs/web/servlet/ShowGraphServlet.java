@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.axis.DateAxis;
@@ -118,10 +118,10 @@ public class ShowGraphServlet extends HttpServlet {
 			try {
 				if (JPG_MIME_TYPE.equalsIgnoreCase(mimeType)) {
 					response.setContentType(JPG_MIME_TYPE);
-					ChartUtilities.writeChartAsJPEG(response.getOutputStream(), chart, width, height);
+					ChartUtils.writeChartAsJPEG(response.getOutputStream(), chart, width, height);
 				} else if (PNG_MIME_TYPE.equalsIgnoreCase(mimeType)) {
 					response.setContentType(PNG_MIME_TYPE);
-					ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, width, height);
+					ChartUtils.writeChartAsPNG(response.getOutputStream(), chart, width, height);
 				} else {
 					throw new APIException("unsupported.mime.type", (Object[]) null);
 				}
@@ -280,14 +280,14 @@ public class ShowGraphServlet extends HttpServlet {
 			timeAxisTitle = "Date";
 		}
 		if (concept1 == null) {
-			series1 = new TimeSeries("NULL", Hour.class);
+			series1 = new TimeSeries("NULL");
 		} else {
-			series1 = new TimeSeries(concept1.getName().getName(), timeScale);
+			series1 = new TimeSeries(concept1.getName().getName());
 		}
 		if (concept2 == null) {
-			series2 = new TimeSeries("NULL", Hour.class);
+			series2 = new TimeSeries("NULL");
 		} else {
-			series2 = new TimeSeries(concept2.getName().getName(), timeScale);
+			series2 = new TimeSeries(concept2.getName().getName());
 		}
 		
 		// Add data points for concept1
@@ -404,8 +404,8 @@ public class ShowGraphServlet extends HttpServlet {
 		XYItemRenderer r = plot.getRenderer();
 		if (r instanceof XYLineAndShapeRenderer) {
 			XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
-			renderer.setBaseShapesFilled(true);
-			renderer.setBaseShapesVisible(true);
+			renderer.setDefaultShapesFilled(true);
+			renderer.setDefaultShapesVisible(true);
 		}
 		
 		// Customize the plot (range and domain axes)
