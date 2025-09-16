@@ -221,6 +221,7 @@
 </script>
 
 <form action="mergePatients.form" id="patientsFound" target="mergePatientPopupIframe">
+	<%@ include file="/WEB-INF/jsp/fragments/csrfToken.jspf" %>
     <span id="patientListSize"></span> <openmrs:message code="Patient.returned"/>.
     <span id="patientsSelect"><openmrs:message code="Patient.merge.select"/>
 	<div dojoType="PatientSearch" widgetId="pSearch" inputId="searchNode" tableHeight="1000"></div>

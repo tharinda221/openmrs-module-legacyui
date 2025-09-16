@@ -14,6 +14,7 @@
 
 <openmrs:htmlInclude file="/dwr/interface/DWRProgramWorkflowService.js" />
 <openmrs:htmlInclude file="/dwr/engine.js" />
+<script src="${pageContext.request.contextPath}/moduleResources/legacyui/scripts/csrf-dwr.js"></script>
 <openmrs:htmlInclude file="/dwr/util.js" />
 	
 <form method="post" id="theForm">

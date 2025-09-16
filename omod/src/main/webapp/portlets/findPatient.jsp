@@ -15,6 +15,7 @@
 
 			<openmrs:htmlInclude file="/dwr/interface/DWRPatientService.js" ></openmrs:htmlInclude>
 			<openmrs:htmlInclude file="/dwr/engine.js" ></openmrs:htmlInclude>
+			<script src="${pageContext.request.contextPath}/moduleResources/legacyui/scripts/csrf-dwr.js"></script>
 			<openmrs:htmlInclude file="/dwr/util.js" ></openmrs:htmlInclude>
 
 			<div id="findPatient">

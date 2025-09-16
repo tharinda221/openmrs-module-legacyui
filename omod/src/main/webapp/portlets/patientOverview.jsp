@@ -5,6 +5,7 @@
 <openmrs:htmlInclude file="/dwr/interface/DWRObsService.js" />
 <openmrs:htmlInclude file="/dwr/interface/DWRConceptService.js" />
 <openmrs:htmlInclude file="/dwr/engine.js" />
+<script src="${pageContext.request.contextPath}/moduleResources/legacyui/scripts/csrf-dwr.js"></script>
 <openmrs:htmlInclude file="/dwr/util.js" />
 
 <openmrs:globalProperty var="importantIdentifiers" key="patient_identifier.importantTypes" />

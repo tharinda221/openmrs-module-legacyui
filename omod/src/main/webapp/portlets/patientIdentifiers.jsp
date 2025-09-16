@@ -11,6 +11,7 @@ highlightMissing=true/false (defaults to true)
 <openmrs:htmlInclude file="/scripts/easyAjax.js" />
 <openmrs:htmlInclude file="/dwr/interface/DWRPatientService.js" />
 <openmrs:htmlInclude file="/dwr/engine.js" />
+<script src="${pageContext.request.contextPath}/moduleResources/legacyui/scripts/csrf-dwr.js"></script>
 <openmrs:htmlInclude file="/dwr/util.js" />
 
 <c:set var="showIfSet" value="${empty model.showIfSet || model.showIfSet == 'true'}"/>

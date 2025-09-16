@@ -23,6 +23,7 @@
 
 <c:if test="${patientIdentifierType.retired && not empty patientIdentifierType.patientIdentifierTypeId}">
 	<form action="" method="post">
+		<%@ include file="/WEB-INF/jsp/fragments/csrfToken.jspf" %>
 		<div class="retiredMessage">
 			<div>
 				<openmrs:message code="general.retiredBy"/>
@@ -40,6 +41,7 @@
     <openmrs_tag:errorNotify errors="${errors}" />
 </spring:hasBindErrors>
 <form method="post">
+	<%@ include file="/WEB-INF/jsp/fragments/csrfToken.jspf" %>
 <fieldset>
 <table>
 	<tr>
@@ -173,6 +175,7 @@
 
 <c:if test="${not patientIdentifierType.retired && not empty patientIdentifierType.patientIdentifierTypeId}">
 	<form method="post">
+		<%@ include file="/WEB-INF/jsp/fragments/csrfToken.jspf" %>
 		<fieldset>
 			<h4><openmrs:message code="PatientIdentifierType.retirePatientIdentifierType"/></h4>
 			
@@ -195,6 +198,7 @@
 <c:if test="${not empty patientIdentifierType.patientIdentifierTypeId}">
 	<openmrs:hasPrivilege privilege="Purge Identifier Types">
 		<form id="purge" method="post" onsubmit="return confirmPurge()">
+			<%@ include file="/WEB-INF/jsp/fragments/csrfToken.jspf" %>
 			<fieldset>
 				<h4><openmrs:message code="PatientIdentifierType.purgePatientIdentifierType"/></h4>
 				<input type="submit" value='<openmrs:message code="PatientIdentifierType.purgePatientIdentifierType"/>' 

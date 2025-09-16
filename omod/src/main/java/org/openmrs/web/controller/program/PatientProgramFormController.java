@@ -35,6 +35,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -48,7 +49,7 @@ public class PatientProgramFormController {
 		return null;
 	}
 	
-	@RequestMapping("/admin/programs/patientProgram.form")
+	@RequestMapping(method = RequestMethod.POST, value = "/admin/programs/patientProgram.form")
 	public ModelAndView enroll(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 	        IOException {
 		

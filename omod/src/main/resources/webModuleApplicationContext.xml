@@ -36,6 +36,9 @@
 
 	<!-- Add here beans related to the web context -->
 	
+	<!-- CSRF Protection Filter -->
+	<bean id="csrfFilter" class="org.openmrs.module.legacyui.security.CsrfFilter" />
+	
 	<bean id="legacyUiUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="interceptors">
 			<list>

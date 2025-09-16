@@ -5,6 +5,7 @@
 
 <script type="text/javascript" src='<%= request.getContextPath() %>/dwr/interface/DWRMessageService.js'></script>
 <script type="text/javascript" src='<%= request.getContextPath() %>/dwr/engine.js'></script>
+<script src="${pageContext.request.contextPath}/moduleResources/legacyui/scripts/csrf-dwr.js"></script>
 <script type="text/javascript" src='<%= request.getContextPath() %>/dwr/util.js'></script>
 
 <script type="text/javascript">

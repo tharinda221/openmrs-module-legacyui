@@ -28,6 +28,7 @@
 		<openmrs:htmlInclude file="/moduleResources/legacyui/css/style.css" />
         <openmrs:htmlInclude file="/moduleResources/legacyui/scripts/html-sanitizer-min.js" />
 		<openmrs:htmlInclude file="/dwr/engine.js" />
+		<script src="${pageContext.request.contextPath}/moduleResources/legacyui/scripts/csrf-dwr.js"></script>
 		<c:if test="${empty DO_NOT_INCLUDE_JQUERY}">
 			<openmrs:htmlInclude file="/scripts/jquery/jquery.min.js" />
 			<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui.custom.min.js" />

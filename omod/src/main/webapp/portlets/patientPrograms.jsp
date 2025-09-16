@@ -4,6 +4,7 @@
 <openmrs:htmlInclude file="/scripts/easyAjax.js" />
 <openmrs:htmlInclude file="/dwr/interface/DWRProgramWorkflowService.js" />
 <openmrs:htmlInclude file="/dwr/engine.js" />
+<script src="${pageContext.request.contextPath}/moduleResources/legacyui/scripts/csrf-dwr.js"></script>
 <openmrs:htmlInclude file="/dwr/util.js" />
 
 <script type="text/javascript">
@@ -559,6 +560,7 @@
 	<br/>
 	<div id="enrollError" class="error" style="display:none;"></div>
 	<form id="enrollForm" name="enrollForm" method="post" action="${pageContext.request.contextPath}/admin/programs/patientProgram.form">
+		<%@ include file="/WEB-INF/jsp/fragments/csrfToken.jspf" %>
 		<input type="hidden" name="method" value="enroll"/>
 		<input type="hidden" name="patientId" value="<c:out value="${model.patientId}" />"/>
 		<input type="hidden" name="returnPage" value="${pageContext.request.contextPath}/patientDashboard.form?patientId=<c:out value="${model.patientId}" />"/>

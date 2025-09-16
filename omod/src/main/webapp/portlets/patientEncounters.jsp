@@ -200,6 +200,7 @@ Parameters
 	<openmrs:htmlInclude file="/dwr/interface/DWRObsService.js" />
 	<openmrs:htmlInclude file="/dwr/interface/DWRPatientService.js" />
 	<openmrs:htmlInclude file="/dwr/engine.js" />
+	<script src="${pageContext.request.contextPath}/moduleResources/legacyui/scripts/csrf-dwr.js"></script>
 	<openmrs:htmlInclude file="/dwr/util.js" />
 	<script type="text/javascript">
 		<!-- // begin

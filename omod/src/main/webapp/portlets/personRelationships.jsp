@@ -1,6 +1,7 @@
 <%@ include file="/WEB-INF/view/module/legacyui/template/include.jsp" %>
 
 <openmrs:htmlInclude file="/dwr/engine.js" />
+<script src="${pageContext.request.contextPath}/moduleResources/legacyui/scripts/csrf-dwr.js"></script>
 <openmrs:htmlInclude file="/dwr/util.js" />
 <openmrs:htmlInclude file="/dwr/interface/DWRRelationshipService.js" />
 <openmrs:htmlInclude file="/dwr/interface/DWRPersonService.js" />

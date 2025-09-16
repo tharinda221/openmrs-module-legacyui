@@ -27,6 +27,7 @@
 		<link href="<openmrs:contextPath/><spring:theme code='stylesheet' />" type="text/css" rel="stylesheet" />
 		<openmrs:htmlInclude file="/moduleResources/legacyui/css/style.css" />
 		<openmrs:htmlInclude file="/dwr/engine.js" />
+		<script src="${pageContext.request.contextPath}/moduleResources/legacyui/scripts/csrf-dwr.js"></script>
         <openmrs:htmlInclude file="/moduleResources/legacyui/scripts/html-sanitizer-min.js" />
 		<openmrs:htmlInclude file="/dwr/interface/DWRAlertService.js" />
 		<c:if test="${empty DO_NOT_INCLUDE_JQUERY}">

@@ -323,6 +323,7 @@
 </spring:hasBindErrors>
 
 <form:form method="post" action="shortPatientForm.form" onsubmit="removeHiddenRows()" modelAttribute="patientModel">
+	<%@ include file="/WEB-INF/jsp/fragments/csrfToken.jspf" %>
 	<c:if test="${patientModel.patient.patientId == null}"><h2><openmrs:message code="Patient.create"/></h2></c:if>
 	<c:if test="${patientModel.patient.patientId != null}"><h2><openmrs:message code="Patient.edit"/></h2></c:if>
 
