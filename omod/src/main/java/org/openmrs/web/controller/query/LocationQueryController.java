@@ -42,10 +42,10 @@ public class LocationQueryController {
 	        @RequestParam(value = "includeNullOption", required = false) Boolean includeNullOption) throws IOException {
 		HierarchyOptions options = new HierarchyOptions();
 		options.selectOnlyLeaves = selectLeafOnly;
-		options.selectableTags = selectableTags;
-		options.startFromTag = startFromTag;
+		options.selectableTags = sanitizeStringList(selectableTags);
+		options.startFromTag = sanitizeString(startFromTag);
 		options.includeNullOption = includeNullOption == null ? true : includeNullOption;
-		return getHierarchy(options); // returning a POJO will be handled by a spring Converter
+		return getHierarchy(options);
 	}
 	
 	/**
@@ -59,7 +59,9 @@ public class LocationQueryController {
 		List<Location> rootNodes = new ArrayList<Location>();
 		if (options.startFromTag != null) {
 			LocationTag tag = Context.getLocationService().getLocationTagByName(options.startFromTag);
-			rootNodes.addAll(Context.getLocationService().getLocationsByTag(tag));
+			if (tag != null) {
+				rootNodes.addAll(Context.getLocationService().getLocationsByTag(tag));
+			}
 		} else {
 			for (Location loc : Context.getLocationService().getAllLocations()) {
 				if (loc.getParentLocation() == null) {
@@ -102,17 +104,17 @@ public class LocationQueryController {
 			
 			Map<String, Object> attrs = new HashMap<String, Object>();
 			attrs.put("id", loc.getLocationId());
-			attrs.put("name", getName(loc));
+			attrs.put("name", getSafeName(loc));
 			attrs.put("rel", nodeType);
 			
 			Map<String, Object> ret = new LinkedHashMap<String, Object>();
 			ret.put("attributes", attrs);
-			StringBuilder sb = new StringBuilder(getName(loc));
+			StringBuilder sb = new StringBuilder(getSafeName(loc));
 			if (loc.getTags() != null && loc.getTags().size() > 0) {
 				sb.append(" (");
 				for (Iterator<LocationTag> i = loc.getTags().iterator(); i.hasNext();) {
 					LocationTag t = i.next();
-					sb.append(getName(t));
+					sb.append(getSafeName(t));
 					if (i.hasNext()) {
 						sb.append(", ");
 					}
@@ -120,6 +122,7 @@ public class LocationQueryController {
 				sb.append(")");
 			}
 			ret.put("data", sb.toString());
+			ret.put("retired", loc.isRetired());
 			if (loc.getChildLocations() != null && loc.getChildLocations().size() > 0) {
 				List<Map<String, Object>> children = new ArrayList<Map<String, Object>>();
 				for (Location child : loc.getChildLocations()) {
@@ -150,15 +153,32 @@ public class LocationQueryController {
 	}
 	
 	/**
-	 * Returns metadata name formatted if retired
-	 * 
-	 * @param metadata
-	 * @return
+	 * Sanitizes a string to prevent code injection
 	 */
-	private String getName(BaseOpenmrsMetadata metadata) {
-		String name = StringEscapeUtils.escapeHtml(metadata.getName());
-		name = StringEscapeUtils.escapeJavaScript(name);
-		return metadata.isRetired() ? "<strike>" + name + "</strike>" : name;
+	private String sanitizeString(String input) {
+		if (input == null) return null;
+		return StringEscapeUtils.escapeHtml(StringEscapeUtils.escapeJavaScript(input.trim()));
+	}
+	
+	/**
+	 * Sanitizes a list of strings
+	 */
+	private List<String> sanitizeStringList(List<String> inputs) {
+		if (inputs == null) return null;
+		List<String> sanitized = new ArrayList<String>();
+		for (String input : inputs) {
+			if (input != null) {
+				sanitized.add(sanitizeString(input));
+			}
+		}
+		return sanitized;
+	}
+	
+	/**
+	 * Returns safely escaped metadata name without HTML injection
+	 */
+	private String getSafeName(BaseOpenmrsMetadata metadata) {
+		return sanitizeString(metadata.getName());
 	}
 	
 	class HierarchyOptions {

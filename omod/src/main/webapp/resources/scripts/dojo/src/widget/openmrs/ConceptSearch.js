@@ -95,9 +95,9 @@ dojo.widget.defineWidget(
 	    		a.onclick = function() { return false };
 	    		a.ondblclick = closure(this, "editDrug", conceptHit.conceptId);
 	    		a.className = "searchHit";
-	    		a.innerHTML = conceptHit.fullName;
+	    		a.textContent = conceptHit.fullName;
 	    		if (this.showConceptIds)
-					a.innerHTML += " (" + conceptHit.conceptId + ")";
+					a.textContent += " (" + conceptHit.conceptId + ")";
 				
 				var span = document.createElement("span");
 				span.innerHTML = " &nbsp; ->";
@@ -114,22 +114,23 @@ dojo.widget.defineWidget(
 	    		if (conceptHit.preferredName != null) {
 	    			var span = document.createElement("span");
 	    			span.className = "mainHit";
-	    			span.innerHTML = conceptHit.name;
+	    			span.textContent = conceptHit.name;
 	    			
 	    			var span2 = document.createElement("span");
 	    			span2.className = "additionalHit";
-	    			span2.innerHTML = "&rArr; " + conceptHit.preferredName;
+	    			span2.innerHTML = "&rArr; ";
+	    			span2.appendChild(document.createTextNode(conceptHit.preferredName));
 	    			if (this.showConceptIds)
-						span2.innerHTML += " (" + conceptHit.conceptId + ")";	
+						span2.appendChild(document.createTextNode(" (" + conceptHit.conceptId + ")"));	
 					a.appendChild(span);
 					a.appendChild(span2);
 				}
 				else {
 					var span = document.createElement("span");
 					span.className = "mainHit";
-					span.innerHTML = conceptHit.name;
+					span.textContent = conceptHit.name;
 					if (this.showConceptIds)
-						span.innerHTML += " (" + conceptHit.conceptId + ")";
+						span.textContent += " (" + conceptHit.conceptId + ")";
 					a.appendChild(span);
 				}
 				
@@ -145,7 +146,7 @@ dojo.widget.defineWidget(
 				if (this.showVerboseListing && this.verboseListing.checked) {
 					var verboseDiv = document.createElement("div");
 					verboseDiv.className="description";
-					verboseDiv.innerHTML = "#" + conceptHit.conceptId + ": " + conceptHit.description;
+					verboseDiv.textContent = "#" + conceptHit.conceptId + ": " + conceptHit.description;
 					var span = document.createElement("span");
 					span.appendChild(a);
 					span.appendChild(verboseDiv);

@@ -112,6 +112,60 @@ function zip(arr){
 	return ret;
 }
 
+// Whitelist of allowed modules
+var ALLOWED_MODULES = {
+	'ui.widget': true, 'html': true, 'event': true, 'io': true,
+	'string': true, 'lang': true, 'dom': true, 'fx': true
+};
+
+// Predefined safe module handlers
+var dojoModuleMap = {
+	'dojo.require': function(moduleName) {
+		if (!isValidModule(moduleName)) return;
+		// Track module dependency safely
+		if (dojo.hostenv.loadedUris.indexOf(moduleName) === -1) {
+			dojo.hostenv.loadedUris.push(moduleName);
+		}
+	},
+	'dojo.provide': function(moduleName) {
+		if (!isValidModule(moduleName)) return;
+		// Track module provision safely
+	},
+	'dojo.requireIf': function() {
+		// No-op for debug mode
+	}
+};
+
+function isValidModule(moduleName) {
+	return typeof moduleName === 'string' && 
+		   /^[a-zA-Z0-9_./-]+$/.test(moduleName) &&
+		   ALLOWED_MODULES[moduleName];
+}
+
+function parseArgumentsSafely(argsStr) {
+	// Only allow simple, quoted string arguments
+	var match = argsStr.match(/^["']([a-zA-Z0-9_./-]+)["']$/);
+	if (!match) return null;
+	return [match[1]];
+}
+
+function safeExecuteDojoCall(callStr) {
+	var match = callStr.match(/^dojo\.(\w+(?:\.\w+)*)\((.*)\)$/);
+	if (!match) return false;
+	
+	var funcName = match[1];
+	var args = match[2];
+	
+	var handler = dojoModuleMap['dojo.' + funcName];
+	if (!handler) return false;
+	
+	var parsedArgs = parseArgumentsSafely(args);
+	if (parsedArgs === null) return false;
+	
+	handler.apply(null, parsedArgs);
+	return true;
+}
+
 // over-write dj_eval to prevent actual loading of subsequent files
 var old_dj_eval = dj_eval;
 dj_eval = function(){ return true; }
@@ -123,11 +177,17 @@ dojo.hostenv.loadUri = function(uri){
 	try{
 		var text = this.getText(uri, null, true);
 		var requires = dojo.hostenv.getRequiresAndProvides(text);
-		eval(requires.join(";"));
+		// Safe execution with strict validation
+		for(var i = 0; i < requires.length; i++) {
+			safeExecuteDojoCall(requires[i]);
+		}
 		dojo.hostenv.loadedUris.push(uri);
 		dojo.hostenv.loadedUris[uri] = true;
 		var delayRequires = dojo.hostenv.getDelayRequiresAndProvides(text);
-		eval(delayRequires.join(";"));
+		// Safe execution with strict validation
+		for(var i = 0; i < delayRequires.length; i++) {
+			safeExecuteDojoCall(delayRequires[i]);
+		}
 	}catch(e){ 
 		alert(e);
 	}
