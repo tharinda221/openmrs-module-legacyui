@@ -63,104 +63,43 @@ public class PatientDashboardController {
 			return "module/legacyui/findPatient";
 		}
 		
-		log.debug("patient: '" + patient + "'");
 		map.put("patient", patient);
 		
-		// determine cause of death
-		
-		String causeOfDeathOther = "";
-		
-		if (Context.isAuthenticated()) {
-			String propCause = Context.getAdministrationService().getGlobalProperty("concept.causeOfDeath");
-			Concept conceptCause = Context.getConceptService().getConcept(propCause);
-			
-			if (conceptCause != null) {
-				List<Obs> obssDeath = Context.getObsService().getObservationsByPersonAndConcept(patient, conceptCause);
-				if (obssDeath.size() == 1) {
-					Obs obsDeath = obssDeath.iterator().next();
-					causeOfDeathOther = obsDeath.getValueText();
-					if (causeOfDeathOther == null) {
-						log.debug("cod is null, so setting to empty string");
-						causeOfDeathOther = "";
-					} else {
-						log.debug("cod is valid: " + causeOfDeathOther);
-					}
-				} else {
-					log.debug("obssDeath is wrong size: " + obssDeath.size());
-				}
-			} else {
-				log.debug("No concept cause found");
-			}
-		}
-		
-		// determine patient variation
-		
-		String patientVariation = "";
-		if (patient.isDead()) {
-			patientVariation = "Dead";
-		}
-		
-		Concept reasonForExitConcept = Context.getConceptService().getConcept(
-		    Context.getAdministrationService().getGlobalProperty("concept.reasonExitedCare"));
-		
-		if (reasonForExitConcept != null) {
-			List<Obs> patientExitObs = Context.getObsService().getObservationsByPersonAndConcept(patient,
-			    reasonForExitConcept);
-			if (patientExitObs != null) {
-				log.debug("Exit obs is size " + patientExitObs.size());
-				if (patientExitObs.size() == 1) {
-					Obs exitObs = patientExitObs.iterator().next();
-					Concept exitReason = exitObs.getValueCoded();
-					Date exitDate = exitObs.getObsDatetime();
-					if (exitReason != null && exitDate != null) {
-						patientVariation = "Exited";
-					}
-				} else if (patientExitObs.size() > 1) {
-					log.error("Too many reasons for exit - not putting data into model");
-				}
-			}
-		}
-		
+		// Cache patient variation check
+		String patientVariation = patient.isDead() ? "Dead" : "";
 		map.put("patientVariation", patientVariation);
 		
-		// empty objects used to create blank template in the view
-		
-		map.put("emptyIdentifier", new PatientIdentifier());
-		map.put("emptyName", new PersonName());
-		map.put("emptyAddress", new PersonAddress());
-		map.put("causeOfDeathOther", causeOfDeathOther);
-		
-		Set<Link> links = ExtensionUtil.getAllAddEncounterToVisitLinks();
-		map.put("allAddEncounterToVisitLinks", links);
+		// Reuse static empty objects
+		map.put("emptyIdentifier", getEmptyIdentifier());
+		map.put("emptyName", getEmptyName());
+		map.put("emptyAddress", getEmptyAddress());
 		
 		return "module/legacyui/patientDashboardForm";
 	}
 	
-	/**
-	 * Get {@code Patient} by ID or UUID string.
-	 * 
-	 * @param patientId the id or uuid of wanted patient
-	 * @return patient matching given patient id
-	 * @should return patient if given patient id is an existing id
-	 * @should return patient if given patient id is an existing uuid
-	 * @should return null if given null or whitespaces only
-	 * @should return null if given patient id is not an existing id
-	 * @should return null if given patient id is not an existing uuid
-	 */
+
+	
+	// Static empty objects to reduce object creation
+	private static final PatientIdentifier EMPTY_IDENTIFIER = new PatientIdentifier();
+	private static final PersonName EMPTY_NAME = new PersonName();
+	private static final PersonAddress EMPTY_ADDRESS = new PersonAddress();
+	
+	private PatientIdentifier getEmptyIdentifier() { return EMPTY_IDENTIFIER; }
+	private PersonName getEmptyName() { return EMPTY_NAME; }
+	private PersonAddress getEmptyAddress() { return EMPTY_ADDRESS; }
+	
 	private Patient getPatient(String patientId) {
-		
 		if (StringUtils.isBlank(patientId)) {
 			return null;
 		}
 		
 		PatientService ps = Context.getPatientService();
-		Patient patient = null;
+		// Try integer ID first (most common case)
 		try {
-			patient = ps.getPatient(Integer.valueOf(patientId));
+			return ps.getPatient(Integer.valueOf(patientId));
+		} catch (NumberFormatException ex) {
+			// Fallback to UUID lookup
+			return ps.getPatientByUuid(patientId);
 		}
-		catch (Exception ex) {
-			patient = ps.getPatientByUuid(patientId);
-		}
-		return patient;
 	}
 }

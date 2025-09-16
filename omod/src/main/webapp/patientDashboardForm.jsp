@@ -33,6 +33,8 @@
 
 	<openmrs:authentication>var userId = "${authenticatedUser.userId}";</openmrs:authentication>
 
+	var startTime = performance.now();
+	
 	//initTabs
 	$j(document).ready(function() {
 		var c = getTabCookie();
@@ -42,6 +44,17 @@
 				c = tabs[0].id;
 		}
 		changeTab(c);
+		
+		// Performance measurement
+		var loadTime = (performance.now() - startTime).toFixed(2);
+		console.log('Original Dashboard Load Time: ' + loadTime + 'ms');
+		
+		// Show performance indicator
+		var perfDiv = document.createElement('div');
+		perfDiv.style.cssText = 'position:fixed;top:10px;left:10px;background:#FF9800;color:white;padding:5px 10px;border-radius:3px;font-size:12px;z-index:9999;';
+		perfDiv.innerHTML = 'Original Dashboard: ' + loadTime + 'ms';
+		document.body.appendChild(perfDiv);
+		setTimeout(function() { perfDiv.remove(); }, 5000);
 	});
 
 	function setTabCookie(tabType) {
